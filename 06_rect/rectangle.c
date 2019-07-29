@@ -16,15 +16,105 @@ int max (int a, int b) {
 }
 
 //Declare your rectangle structure here!
+struct rectangle_t {
+  int x, y, width, height;
+};
+
+typedef struct rectangle_t rectangle;
 
 
 rectangle canonicalize(rectangle r) {
   //WRITE THIS FUNCTION
+  if(r.width < 0){
+    r.x = r.x + r.width;
+    r.width = r.width * -1;
+  }
+  if(r.height < 0){
+    r.y = r.y + r.height;
+    r.height = r.height * -1;
+  }
   return r;
 }
 rectangle intersection(rectangle r1, rectangle r2) {
   //WRITE THIS FUNCTION
-  return r1;
+  r1 = canonicalize(r1);
+  r2 = canonicalize(r2);
+  rectangle r;
+  rectangle rTemp;
+  //  short int swap = 0;
+  if( r1.x > r2.x ){  //swapping the rectangles so r1 is always on the left side of r2
+    // printf("r1.x = %d  r1.y = %d  r1.width = %d  r1.height = %d\n", r1.x, r1.y, r1.width, r1.height);
+    //printf("r2.x = %d  r2.y = %d  r2.width = %d  r2.height = %d\n", r2.x, r2.y, r2.width, r2.height);
+    rTemp = r1;
+    r1 = r2;
+    r2 = rTemp;
+    //swap = 1;
+    //printf("r1.x = %d  r1.y = %d  r1.width = %d  r1.height = %d\n", r1.x, r1.y, r1.width, r1.height);
+    //printf("r2.x = %d  r2.y = %d  r2.width = %d  r2.height = %d\n", r2.x, r2.y, r2.width, r2.height);
+
+  }
+  //  printf("Swap = %d\n",swap);
+  if( (r1.x + r1.width) < r2.x ){
+    r.x = 0;
+    r.y = 0;
+    r.width = 0;
+    r.height = 0;
+    return r;
+  }
+  if( (r2.y + r2.height) < r1.y ){
+    r.x = 0;
+    r.y = 0;
+    r.width = 0;
+    r.height = 0;
+    
+  }
+  else if( (r2.y + r2.height) <= r1.y + r1.height ){
+    r.x = r2.x;
+    if(r1.y > r2.y){
+    r.y = r1.y;
+    }
+    else{r.y = r2.y;}
+    r.width = min(r1.x+r1.width, r2.x+r2.width) - r.x;
+    r.height = min(r1.y+r1.height, r2.y+r2.height) - r.y;
+    
+  }
+  else if( (r2.y + r2.height) > r1.y + r1.height ){
+    r.x = r2.x;
+    if(r1.y > r2.y){
+    r.y = r1.y;
+    }
+    else{r.y = r2.y;}
+    r.width = min(r1.x+r1.width, r2.x+r2.width) - r.x;
+    r.height = min(r1.y+r1.height, r2.y+r2.height) - r.y;
+    
+  }
+  else{
+  r.x = 999;
+  r.y = 999;
+  r.width = 999;
+  r.height = 999;
+  }
+    
+   return r;
+  
+  
+  /*
+  if(r2.x > (r1.x + r1.width)){
+    r.x = 0;
+    r.y = 0;
+    r.width = 0;
+    r.height = 0;
+    return r;
+    }
+
+
+
+  r.x = max(r1.x, r2.x);
+  r.y = max(r1.y, r2.y);
+  r.width = min(r1.width, r2.width);
+  r.height = min(r1.height, r1.height);
+  return r;
+  */
 }
 
 //You should not need to modify any code below this line
